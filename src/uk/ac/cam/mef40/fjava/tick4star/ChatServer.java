@@ -16,4 +16,35 @@
 
 package uk.ac.cam.mef40.fjava.tick4star;
 
-public class ChatServer {}
+import uk.ac.cam.cl.fjava.messages.Message;
+import uk.ac.cam.cl.fjava.messages.NewMessageType;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ChatServer {
+    public static void main(String[] args) {
+        int port = 0;
+        try {
+            port = Integer.parseInt(args[0]);
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Usage: java ChatServer <port>");
+            return;
+        }
+
+        try {
+            final ServerSocket serverSocket = new ServerSocket(port);
+            final MultiQueue<Message> multiQueue = new MultiQueue<>();
+
+            while (true) {
+                Socket socket = serverSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(socket, multiQueue);
+            }
+        } catch (IOException e) {
+            System.out.format("Cannot use port number %d\n", port);
+            return;
+        }
+    }
+}
