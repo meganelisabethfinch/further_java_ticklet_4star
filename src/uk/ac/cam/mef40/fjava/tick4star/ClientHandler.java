@@ -84,7 +84,7 @@ public class ClientHandler {
                     clientMessages.put(new NewMessageType(openGuiMsg.getName(), is3.readAllBytes()));
 
                     // Send OpenGUIMessage
-                    clientMessages.put(new OpenGUIMessage());
+                    clientMessages.put(new OpenGUIMessage(s.getInetAddress().getHostAddress(), s.getLocalPort()));
 
                     while (true) {
                         Message msg = clientMessages.take();
